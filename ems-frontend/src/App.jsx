@@ -18,9 +18,11 @@ function App() {
       {/*//http://localhost/3000/employee*/}
       <Route path='/employee' element = {<ListEmployeeComponent/>}></Route>
       <Route path='/add-employee' element = {<EmployeeComponent/>}></Route>
+      <Route path='/edit-employee/:id' element = {<EmployeeComponent/>}></Route>
     </Routes>
      </BrowserRouter>
     </>
   )
 }
+
 export default App

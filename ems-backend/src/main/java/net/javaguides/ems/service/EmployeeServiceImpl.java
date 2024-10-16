@@ -7,7 +7,10 @@ import net.javaguides.ems.exception.ResourceNotFoundException;
 import net.javaguides.ems.mapper.EmployeeMapper;
 import net.javaguides.ems.repository.EmployeeRepository;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +27,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return EmployeeMapper.mapToEmployeeDTO(savedEmployee);
     }
 
-    @Override
-    public EmployeeDto getEmployeeById(Long employeeId) {
+    @GetMapping("/{id}") // Endpoint to get an employee by ID
+    public EmployeeDto getEmployeeById(@PathVariable("id") Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId)
                 .orElseThrow(() -> new ResourceNotFoundException("Employee with id " + employeeId + " not found"));
         return EmployeeMapper.mapToEmployeeDTO(employee);
