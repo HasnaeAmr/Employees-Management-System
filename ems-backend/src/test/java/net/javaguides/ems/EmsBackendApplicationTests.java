@@ -1,33 +1,55 @@
 package net.javaguides.ems;
 
+import net.javaguides.ems.service.EmployeeService;
+import net.javaguides.ems.repository.EmployeeRepository;
+import net.javaguides.ems.model.Employee;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.ApplicationContext;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
-@SpringBootTest
-class EmsBackendApplicationTests {
+import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-    @Autowired
-    private ApplicationContext context;
+class EmployeeServiceTest {
 
-    @Test
-    void contextLoads() {
-        // Ensuring the application context is loaded
-        assertNotNull(context, "Application context should not be null");
+    @Mock
+    private EmployeeRepository employeeRepository;
+
+    @InjectMocks
+    private EmployeeService employeeService;
+
+    private Employee employee;
+
+    @BeforeEach
+    void setUp() {
+        MockitoAnnotations.openMocks(this);
+        employee = new Employee(1, "John Doe", "Software Engineer", "john.doe@example.com");
     }
 
     @Test
-    void testServiceLayer() {
-        // Example: Check if a service bean exists
-        assertNotNull(context.getBean(YourServiceClass.class), "Service bean should be loaded");
+    void testGetEmployeeById() {
+        // Given
+        when(employeeRepository.findById(1)).thenReturn(java.util.Optional.of(employee));
+
+        // When
+        Employee foundEmployee = employeeService.getEmployeeById(1);
+
+        // Then
+        assertNotNull(foundEmployee);
+        assertEquals("John Doe", foundEmployee.getName());
     }
 
     @Test
-    void testControllerLayer() {
-        // Example: Check if a controller bean exists
-        assertNotNull(context.getBean(YourControllerClass.class), "Controller bean should be loaded");
+    void testEmployeeNotFound() {
+        // Given
+        when(employeeRepository.findById(1)).thenReturn(java.util.Optional.empty());
+
+        // When
+        Employee foundEmployee = employeeService.getEmployeeById(1);
+
+        // Then
+        assertNull(foundEmployee);
     }
 }
